@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_50"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/posdes" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/archivo"
+        android:text="Login Posyandu Desa"
+        android:textColor="@color/teal_700"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textFontWeight="900" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/archivo"
+        android:text="Silakan masuk ke akun Anda"
+        android:textColor="@color/gray_500"
+        android:textSize="14sp" />
+
+    <!-- Field Email dengan hint "Masukkan email" -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_background"
+        android:hint="Masukkan email"
+        android:inputType="textEmailAddress"
+        android:padding="14dp"
+        android:textColor="@color/gray_900"
+        android:textColorHint="@color/gray_500" />
+
+    <!-- Field Password dengan hint "Masukkan password" -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/edittext_background"
+        android:hint="Masukkan password"
+        android:inputType="textPassword"
+        android:padding="14dp"
+        android:textColor="@color/gray_900"
+        android:textColorHint="@color/gray_500" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/green_500"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</LinearLayout>

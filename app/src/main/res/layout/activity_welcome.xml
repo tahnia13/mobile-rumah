@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#EEF2FF"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/posdes" />
+
+    <TextView
+        android:text="Welcome!"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/archivo"
+        android:textColor="@color/teal_700"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textFontWeight="770"/>
+
+    <TextView
+        android:text="Selamat datang di aplikasi MyApps"
+        android:textSize="16sp"
+        android:fontFamily="@font/archivo"
+        android:textColor="#1E7E1E"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
