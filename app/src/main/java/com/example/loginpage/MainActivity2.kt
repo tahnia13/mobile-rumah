@@ -3,34 +3,23 @@ package com.example.loginpage
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.example.loginpage.databinding.ActivityMain2Binding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Setup Toolbar
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "Dashboard"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // Inisialisasi SharedPreferences
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -43,73 +32,68 @@ class MainActivity2 : AppCompatActivity() {
             finish()
         }
 
-        // Ambil data user
-        val userName = sharedPreferences.getString("userName", "User")
-        val tvUserName = findViewById<TextView>(R.id.tvUserName)
-        tvUserName.text = userName
+        // Setup Bottom Navigation
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigation.setOnNavigationItemSelectedListener(navListener)
 
-        Toast.makeText(this, "Selamat datang, $userName!", Toast.LENGTH_SHORT).show()
-
-        // Tombol 1: Rumus Bangun Ruang
-        binding.btnRuang.setOnClickListener {
-            val intent = Intent(this, RumusBangunRuangActivity::class.java)
-            startActivity(intent)
+        // Tampilkan fragment Home secara default
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment())
+                .commit()
         }
 
-        // Tombol 2: Buka Dashboard Web
-        binding.btnWebDashboard.setOnClickListener {
-            val url = "https://tahnia-posyandu.alwaysdata.net/dashboard"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
-        }
+        // GANTI onBackPressed() dengan OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Cek apakah sedang di fragment selain Home
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
-        // Tombol 3: Custom Page 1
-        binding.btnCustom1.setOnClickListener {
-            val intent = Intent(this, Custom1Activity::class.java)
-            startActivity(intent)
-        }
+                if (currentFragment !is HomeFragment) {
+                    // Jika bukan di Home, kembali ke Home
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .commit()
 
-        // Tombol 4: Custom Page 2
-        binding.btnCustom2.setOnClickListener {
-            val intent = Intent(this, Custom2Activity::class.java)
-            startActivity(intent)
-        }
-
-        // Tombol 5: Logout
-        binding.btnLogout.setOnClickListener {
-            showLogoutConfirmation()
-        }
+                    // Reset bottom navigation ke Home
+                    val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                    bottomNav.selectedItemId = R.id.nav_home
+                } else {
+                    // Jika sudah di Home, keluar aplikasi
+                    finish()
+                }
+            }
+        })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
+    private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        var selectedFragment: Fragment? = null
+
+        when (item.itemId) {
+            R.id.nav_home -> {
+                selectedFragment = HomeFragment()
             }
-            else -> super.onOptionsItemSelected(item)
+            R.id.nav_about -> {
+                selectedFragment = AboutFragment()
+            }
+            R.id.nav_profile -> {
+                selectedFragment = ProfileFragment()
+            }
         }
+
+        if (selectedFragment != null) {
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+                .replace(R.id.fragment_container, selectedFragment)
+                .commit()
+        }
+
+        true
     }
 
-    private fun showLogoutConfirmation() {
-        AlertDialog.Builder(this)
-            .setTitle("Konfirmasi Logout")
-            .setMessage("Apakah Anda yakin ingin logout?")
-            .setPositiveButton("Ya") { _, _ ->
-                val editor = sharedPreferences.edit()
-                editor.clear()
-                editor.apply()
-
-                Toast.makeText(this, "Logout berhasil!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Tidak") { _, _ ->
-                Toast.makeText(this, "Logout dibatalkan", Toast.LENGTH_SHORT).show()
-            }
-            .show()
-    }
+    // HAPUS method onBackPressed() yang lama
+    // override fun onBackPressed() { ... }  ← HAPUS INI
 }
