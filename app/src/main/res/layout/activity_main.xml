@@ -71,4 +71,32 @@
         android:text="Login"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <!-- Link ke Register -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belum punya akun? "
+            android:textColor="@color/gray_500"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Daftar"
+            android:textColor="@color/teal_700"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </LinearLayout>

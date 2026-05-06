@@ -22,12 +22,18 @@ class MainActivity : AppCompatActivity() {
         // Inisialisasi SharedPreferences
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
-        // Cek apakah user sudah login sebelumnya
+        // Cek apakah user SUDAH LOGIN sebelumnya (isLogin = true)
         if (sharedPreferences.getBoolean("isLogin", false)) {
             // Jika sudah login, langsung ke dashboard
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
             finish()
+        }
+
+        // Link ke Register
+        binding.tvRegister.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
         binding.btnLogin.setOnClickListener {
@@ -36,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
             // Validasi input kosong
             if (email.isEmpty()) {
-                binding.etEmail.error = "Masukkan email"
+                binding.etEmail.error = "Masukkan email/username"
                 binding.etEmail.requestFocus()
                 return@setOnClickListener
             }
@@ -47,15 +53,10 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Contoh autentikasi sederhana
-            // Ganti dengan logic sesuai kebutuhan (API, database, dll)
-            if (email == "tahnia@gmail.com" && password == "tahnia123") {
-                // Simpan session login
-                val editor = sharedPreferences.edit()
-                editor.putBoolean("isLogin", true)
-                editor.putString("userEmail", email)
-                editor.putString("userName", "Admin Posyandu")
-                editor.apply()
+            // Coba login
+            if (performLogin(email, password)) {
+                // Login berhasil - simpan session
+                saveLoginSession(email, password)
 
                 Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show()
 
@@ -63,8 +64,50 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                Toast.makeText(this, "Email atau password salah!", Toast.LENGTH_SHORT).show()
+                // Login gagal
+                Toast.makeText(this, "Email/username atau password salah!", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /**
+     * Melakukan pengecekan login dengan 2 rule:
+     * 1. Username == Password
+     * 2. Username & Password sesuai dengan data di SharedPreferences
+     */
+    private fun performLogin(username: String, password: String): Boolean {
+        // Rule 1: Username == Password
+        if (username == password) {
+            return true
+        }
+
+        // Rule 2: Cek dengan data di SharedPreferences (hasil registrasi)
+        val savedUsername = sharedPreferences.getString("userEmail", "")
+        val savedPassword = sharedPreferences.getString("password", "")
+
+        // Jika username dan password cocok dengan data yang tersimpan
+        if (username == savedUsername && password == savedPassword) {
+            return true
+        }
+
+        // Jika tidak memenuhi kedua rule, login gagal
+        return false
+    }
+
+    /**
+     * Menyimpan session login ke SharedPreferences
+     */
+    private fun saveLoginSession(username: String, password: String) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLogin", true)
+        editor.putString("userEmail", username)
+
+        // Jika login dengan rule 1, simpan username sebagai nama
+        if (username == password) {
+            editor.putString("userName", username)
+        }
+        // Jika login dengan data registrasi, nama sudah tersimpan dari registrasi
+
+        editor.apply()
     }
 }
