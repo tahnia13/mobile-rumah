@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginPage">
         <activity
-            android:name=".VerifyOtpActivity"
+            android:name=".ActivityVerification"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ActivityRegister"
             android:exported="false" />
         <activity
             android:name=".Custom2Activity"
@@ -33,10 +33,10 @@
             android:name=".MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

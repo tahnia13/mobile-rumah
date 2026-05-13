@@ -19,4 +19,7 @@
     <color name="teal_800">#00695C</color>
     <color name="green_700">#388E3C</color>
     <color name="green_900">#064E3B</color>
+    <color name="bottom_nav_color">#059669</color>
+    <color name="gray_600">#4B5563</color>
+    <color name="green_600">#059669</color>
 </resources>

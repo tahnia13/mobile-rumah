@@ -1,6 +1,8 @@
 package com.example.loginpage
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -31,4 +33,22 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected open val defaultTitle: String = "Halaman"
     protected open val defaultDescription: String = "Deskripsi halaman"
+
+    // Method untuk kembali ke MainActivity2
+    protected fun navigateBackToDashboard() {
+        val intent = Intent(this, MainActivity2::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                navigateBackToDashboard()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

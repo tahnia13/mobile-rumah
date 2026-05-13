@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#F0F9FF">
-
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/green_900"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+    android:background="#F0FDF4">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,16 +14,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvJudul"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📱 Tentang Aplikasi"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#1E3A8A"
-                android:layout_marginBottom="16dp" />
+                android:textColor="#065F46"
+                android:gravity="center"
+                android:layout_marginBottom="20dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -51,29 +42,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🏥 Posyandu Desa - Aplikasi Bina Desa"
-                        android:textSize="20sp"
+                        android:text="📖 DEFINISI"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#1E3A8A"
-                        android:layout_marginBottom="12dp" />
+                        android:textColor="#059669"
+                        android:layout_marginBottom="8dp" />
 
                     <TextView
+                        android:id="@+id/tvDefinisi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Definisi:"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#2563EB"
-                        android:layout_marginBottom="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Aplikasi Posyandu Desa adalah platform digital yang dirancang untuk membantu pengelolaan data dan kegiatan Posyandu di tingkat desa. Aplikasi ini memudahkan pencatatan tumbuh kembang balita, jadwal imunisasi, pemantauan gizi, serta pelaporan kegiatan Posyandu secara real-time kepada dinas kesehatan."
                         android:textSize="14sp"
                         android:textColor="#374151"
-                        android:lineSpacingExtra="4dp"
-                        android:layout_marginBottom="16dp" />
+                        android:lineSpacingExtra="4dp" />
 
                 </LinearLayout>
 
@@ -95,53 +76,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="✨ Fitur Utama:"
-                        android:textSize="16sp"
+                        android:text="✨ FITUR-FITUR"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#2563EB"
+                        android:textColor="#059669"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
+                        android:id="@+id/tvFitur"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📊 Dashboard Monitoring Kesehatan\n👶 Pencatatan Data Balita &amp; Ibu Hamil\n💉 Jadwal Imunisasi &amp; Vaksinasi\n📈 Grafik Pertumbuhan Anak\n🏠 Pendataan Kunjungan Rumah\n📋 Laporan Kegiatan Bulanan\n🔐 Sistem Login &amp; Keamanan Data\n📱 Akses Mobile &amp; Web Dashboard"
                         android:textSize="14sp"
                         android:textColor="#374151"
-                        android:lineSpacingExtra="6dp" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎯 Topik Bina Desa:"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#2563EB"
-                        android:layout_marginBottom="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1. Digitalisasi Layanan Kesehatan Desa\n2. Pemberdayaan Kader Posyandu\n3. Sistem Informasi Kesehatan Terpadu\n4. Monitoring Gizi &amp; Stunting\n5. Edukasi Kesehatan Masyarakat\n6. Integrasi Data dengan Puskesmas\n7. Pelaporan Real-time ke Dinas Kesehatan"
-                        android:textSize="14sp"
-                        android:textColor="#374151"
-                        android:lineSpacingExtra="6dp" />
+                        android:lineSpacingExtra="4dp" />
 
                 </LinearLayout>
 
@@ -162,16 +109,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📌 Visi &amp; Misi:"
-                        android:textSize="16sp"
+                        android:text="🎯 TUJUAN"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#2563EB"
+                        android:textColor="#059669"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
+                        android:id="@+id/tvTujuan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Visi:\nMewujudkan desa sehat dan sejahtera melalui digitalisasi layanan Posyandu yang terintegrasi.\n\nMisi:\n• Mempermudah akses informasi kesehatan masyarakat desa\n• Meningkatkan kualitas pelayanan Posyandu\n• Mendukung program pemerintah dalam penurunan stunting\n• Memberdayakan kader Posyandu dengan teknologi"
                         android:textSize="14sp"
                         android:textColor="#374151"
                         android:lineSpacingExtra="4dp" />

@@ -6,16 +6,6 @@
     android:orientation="vertical"
     android:background="@drawable/gradient_background">
 
-
-    <!-- Toolbar tanpa navigation icon -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/green_900"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

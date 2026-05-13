@@ -4,32 +4,33 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.example.loginpage.databinding.ActivityMain2Binding
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.loginpage.databinding.ActivityMain2Binding
 
 class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var toolbar: Toolbar
+    private lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Di dalam onCreate MainActivity2
-// Ambil data user
-        val userName = sharedPreferences.getString("userName", "User")
-        val tvUserName = findViewById<TextView>(R.id.tvUserName)
-        tvUserName.text = userName
-
-        Toast.makeText(this, "Selamat datang, $userName!", Toast.LENGTH_SHORT).show()
-
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setup Toolbar
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Dashboard"
+
+        // Di MainActivity2, tombol back tidak ditampilkan
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowHomeEnabled(false)
 
         // Inisialisasi SharedPreferences
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -43,67 +44,81 @@ class MainActivity2 : AppCompatActivity() {
         }
 
         // Setup Bottom Navigation
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigation.setOnNavigationItemSelectedListener(navListener)
+        bottomNav = findViewById(R.id.bottomNavigation)
 
-        // Tampilkan fragment Home secara default
+        // Load fragment default (Home)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment())
+                .replace(R.id.fragmentContainer, FragmentHome())
                 .commit()
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        // GANTI onBackPressed() dengan OnBackPressedDispatcher
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // Cek apakah sedang di fragment selain Home
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-
-                if (currentFragment !is HomeFragment) {
-                    // Jika bukan di Home, kembali ke Home
+        // Set listener untuk bottom navigation
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment())
+                        .replace(R.id.fragmentContainer, FragmentHome())
                         .commit()
-
-                    // Reset bottom navigation ke Home
-                    val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-                    bottomNav.selectedItemId = R.id.nav_home
-                } else {
-                    // Jika sudah di Home, keluar aplikasi
-                    finish()
+                    supportActionBar?.title = "Dashboard"
+                    // Sembunyikan tombol back di fragment Home
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    true
                 }
-            }
-        })
-    }
-
-    private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        var selectedFragment: Fragment? = null
-
-        when (item.itemId) {
-            R.id.nav_home -> {
-                selectedFragment = HomeFragment()
-            }
-            R.id.nav_about -> {
-                selectedFragment = AboutFragment()
-            }
-            R.id.nav_profile -> {
-                selectedFragment = ProfileFragment()
+                R.id.nav_about -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentAbout())
+                        .commit()
+                    supportActionBar?.title = "Tentang Bina Desa"
+                    // Tampilkan tombol back di fragment About
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    true
+                }
+                R.id.nav_profile -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentProfile())
+                        .commit()
+                    supportActionBar?.title = "Profil Developer"
+                    // Tampilkan tombol back di fragment Profile
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    true
+                }
+                else -> false
             }
         }
+    }
 
-        if (selectedFragment != null) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Kembali ke fragment Home (Dashboard)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentHome())
+                    .commit()
+                supportActionBar?.title = "Dashboard"
+                // Sembunyikan tombol back kembali
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                // Set selected item di bottom navigation ke Home
+                bottomNav.selectedItemId = R.id.nav_home
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        // Handle tombol back fisik
+        if (supportActionBar?.title == "Dashboard") {
+            super.onBackPressed()
+        } else {
+            // Kembali ke Dashboard jika tidak di fragment Home
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-                .replace(R.id.fragment_container, selectedFragment)
+                .replace(R.id.fragmentContainer, FragmentHome())
                 .commit()
+            supportActionBar?.title = "Dashboard"
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            bottomNav.selectedItemId = R.id.nav_home
         }
-
-        true
     }
-
-    // HAPUS method onBackPressed() yang lama
-    // override fun onBackPressed() { ... }  ← HAPUS INI
 }

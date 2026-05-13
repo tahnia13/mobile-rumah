@@ -1,5 +1,38 @@
 <resources>
     <string name="app_name">LoginPage</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Strings untuk OTP Verification -->
+    <string name="app_logo">Logo Aplikasi</string>
+    <string name="verification_title">Verifikasi OTP</string>
+    <string name="verification_message">Kami telah mengirimkan kode verifikasi</string>
+    <string name="verify_button">Verifikasi</string>
+    <string name="resend_button">Kirim Ulang</string>
+    <string name="not_receive_code">Tidak menerima kode? </string>
+    <string name="seconds"> detik)</string>
+
+    <!-- Content Description untuk Accessibility -->
+    <string name="otp_digit_1">Digit pertama kode OTP</string>
+    <string name="otp_digit_2">Digit kedua kode OTP</string>
+    <string name="otp_digit_3">Digit ketiga kode OTP</string>
+    <string name="otp_digit_4">Digit keempat kode OTP</string>
+    <string name="otp_digit_5">Digit kelima kode OTP</string>
+    <string name="otp_digit_6">Digit keenam kode OTP</string>
+
+    <!-- Strings untuk Register -->
+    <string name="register_title">Daftar Akun Baru</string>
+    <string name="register_subtitle">Silakan isi data diri Anda</string>
+    <string name="name_hint">Nama Lengkap</string>
+    <string name="phone_hint">No. Handphone</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="register_button">Daftar</string>
+    <string name="have_account">Sudah punya akun? </string>
+    <string name="login_here">Login di sini</string>
+
+    <!-- Strings untuk Login -->
+    <string name="login_title">Login Posyandu Desa</string>
+    <string name="login_subtitle">Silakan masuk ke akun Anda</string>
+    <string name="email_hint">Email atau Username</string>
+    <string name="login_button">Login</string>
+    <string name="register_account">Daftar Akun Baru</string>
 </resources>
