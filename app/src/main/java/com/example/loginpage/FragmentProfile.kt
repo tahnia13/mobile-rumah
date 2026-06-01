@@ -1,9 +1,12 @@
 package com.example.loginpage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.loginpage.databinding.FragmentProfileBinding
 
@@ -35,7 +38,7 @@ class FragmentProfile : Fragment() {
         binding.tvDeskripsi.text = """
             Halo! Saya adalah mahasiswa Teknik Informatika yang memiliki minat besar dalam pengembangan aplikasi mobile, terutama Android. 
             
-            Aplikasi ini dikembangkan sebagai bagian dari proyek akhir untuk memenuhi tugas mata kuliah Pemrograman Mobile.
+            Aplikasi Bina Desa ini dikembangkan sebagai bagian dari proyek akhir untuk memenuhi tugas mata kuliah Pemrograman Mobile.
             
             Saya berkomitmen untuk terus belajar dan mengembangkan aplikasi yang bermanfaat bagi masyarakat, khususnya dalam mendukung program Bina Desa dan pemberdayaan masyarakat.
             
@@ -45,8 +48,17 @@ class FragmentProfile : Fragment() {
             • Material Design
             • SharedPreferences
             • Fragment
-            • REST API
+            • Chip & ChipGroup
+            • GridLayout
+            • ListView/SimpleAdapter
         """.trimIndent()
+
+        // Tambahkan tombol Settings jika ada di layout
+        val btnSettings = view.findViewById<Button>(R.id.btnSettings)
+        btnSettings?.setOnClickListener {
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

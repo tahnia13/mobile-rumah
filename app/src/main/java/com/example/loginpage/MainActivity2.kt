@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,7 +27,7 @@ class MainActivity2 : AppCompatActivity() {
         // Setup Toolbar
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Dashboard"
+        supportActionBar?.title = "Posyandu Desa"
 
         // Di MainActivity2, tombol back tidak ditampilkan
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -46,11 +47,12 @@ class MainActivity2 : AppCompatActivity() {
         // Setup Bottom Navigation
         bottomNav = findViewById(R.id.bottomNavigation)
 
-        // Load fragment default (Home)
+        // Load fragment default (Home Posyandu)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentHome())
+                .replace(R.id.fragmentContainer, FragmentHomePosyandu())
                 .commit()
+            supportActionBar?.title = "Posyandu Desa"
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
@@ -59,19 +61,25 @@ class MainActivity2 : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.nav_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentHome())
+                        .replace(R.id.fragmentContainer, FragmentHomePosyandu())
                         .commit()
-                    supportActionBar?.title = "Dashboard"
-                    // Sembunyikan tombol back di fragment Home
+                    supportActionBar?.title = "Posyandu Desa"
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    true
+                }
+                R.id.nav_settings -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentSettings())
+                        .commit()
+                    supportActionBar?.title = "Pengaturan"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }
                 R.id.nav_about -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, FragmentAbout())
                         .commit()
-                    supportActionBar?.title = "Tentang Bina Desa"
-                    // Tampilkan tombol back di fragment About
+                    supportActionBar?.title = "Tentang Posyandu"
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }
@@ -80,13 +88,30 @@ class MainActivity2 : AppCompatActivity() {
                         .replace(R.id.fragmentContainer, FragmentProfile())
                         .commit()
                     supportActionBar?.title = "Profil Developer"
-                    // Tampilkan tombol back di fragment Profile
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }
                 else -> false
             }
         }
+
+        // Menggunakan OnBackPressedCallback (cara modern, tidak deprecated)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (supportActionBar?.title == "Posyandu Desa") {
+                    // Jika di halaman utama, tutup aplikasi
+                    finish()
+                } else {
+                    // Kembali ke Dashboard jika tidak di fragment Home
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentHomePosyandu())
+                        .commit()
+                    supportActionBar?.title = "Posyandu Desa"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    bottomNav.selectedItemId = R.id.nav_home
+                }
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,31 +119,15 @@ class MainActivity2 : AppCompatActivity() {
             android.R.id.home -> {
                 // Kembali ke fragment Home (Dashboard)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, FragmentHome())
+                    .replace(R.id.fragmentContainer, FragmentHomePosyandu())
                     .commit()
-                supportActionBar?.title = "Dashboard"
-                // Sembunyikan tombol back kembali
+                supportActionBar?.title = "Posyandu Desa"
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 // Set selected item di bottom navigation ke Home
                 bottomNav.selectedItemId = R.id.nav_home
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onBackPressed() {
-        // Handle tombol back fisik
-        if (supportActionBar?.title == "Dashboard") {
-            super.onBackPressed()
-        } else {
-            // Kembali ke Dashboard jika tidak di fragment Home
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentHome())
-                .commit()
-            supportActionBar?.title = "Dashboard"
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            bottomNav.selectedItemId = R.id.nav_home
         }
     }
 }

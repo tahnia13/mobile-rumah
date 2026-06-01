@@ -1,0 +1,128 @@
+package com.example.loginpage
+
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+
+class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var toolbar: Toolbar
+    private lateinit var listView: ListView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Pengaturan Bina Desa"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        listView = findViewById(R.id.listViewSettings)
+
+        // Data menu dengan ArrayAdapter sederhana
+        val menuItems = arrayOf(
+            "📋 Kebijakan Privasi",
+            "🔒 Syarat & Ketentuan",
+            "ℹ️ Tentang Aplikasi",
+            "⭐ Beri Rating",
+            "📞 Hubungi Kami",
+            "🔄 Versi Aplikasi"
+        )
+
+        // Menggunakan ArrayAdapter dengan layout default
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            menuItems
+        )
+
+        listView.adapter = adapter
+
+        listView.setOnItemClickListener { _, _, position, _ ->
+            when (position) {
+                0 -> showPrivacyPolicy()
+                1 -> showTermsOfService()
+                2 -> showAboutApp()
+                3 -> Toast.makeText(this, "Terima kasih atas rating Anda!", Toast.LENGTH_SHORT).show()
+                4 -> showContactInfo()
+                5 -> Toast.makeText(this, "Bina Desa - Versi 1.0.0", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showPrivacyPolicy() {
+        AlertDialog.Builder(this)
+            .setTitle("Kebijakan Privasi")
+            .setMessage("""
+                Bina Desa berkomitmen melindungi data pribadi Anda. Data yang dikumpulkan:
+                
+                • Informasi profil pengguna
+                • Data penduduk desa
+                • Laporan kegiatan
+                
+                Data hanya digunakan untuk kepentingan program pemberdayaan desa.
+            """.trimIndent())
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showTermsOfService() {
+        AlertDialog.Builder(this)
+            .setTitle("Syarat & Ketentuan")
+            .setMessage("""
+                Dengan menggunakan aplikasi Bina Desa, Anda setuju untuk:
+                
+                1. Menggunakan data dengan bertanggung jawab
+                2. Menjaga kerahasiaan akun
+                3. Melaporkan jika ada data tidak sesuai
+                4. Mendukung program pemberdayaan desa
+            """.trimIndent())
+            .setPositiveButton("Setuju", null)
+            .show()
+    }
+
+    private fun showAboutApp() {
+        AlertDialog.Builder(this)
+            .setTitle("Tentang Bina Desa")
+            .setMessage("""
+                Bina Desa adalah program pemberdayaan masyarakat desa yang bertujuan meningkatkan kesejahteraan warga desa melalui pembangunan dan pemberdayaan.
+                
+                Dikembangkan oleh: Tahnia
+                NIM: 20220040080
+                Teknik Informatika - Universitas Nusa Putra
+                
+                © 2024 Bina Desa. All Rights Reserved.
+            """.trimIndent())
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showContactInfo() {
+        AlertDialog.Builder(this)
+            .setTitle("Hubungi Kami")
+            .setMessage("""
+                Email: binadesa@gmail.com
+                Telepon: (0266) 123456
+                Website: https://tahnia-posyandu.alwaysdata.net
+                
+                Alamat: Jl. Raya Cikidang, Sukabumi
+            """.trimIndent())
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+}

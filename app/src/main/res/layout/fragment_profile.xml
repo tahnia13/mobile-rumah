@@ -184,6 +184,18 @@
 
             </androidx.cardview.widget.CardView>
 
+            <!-- Tombol Settings -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSettings"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:text="⚙️ Pengaturan &amp; Informasi"
+                android:textSize="14sp"
+                android:backgroundTint="#34D399"
+                android:textColor="#064E3B"
+                app:cornerRadius="28dp" />
+
             <!-- Version Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
