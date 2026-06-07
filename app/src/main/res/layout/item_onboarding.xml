@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <ImageView
+        android:id="@+id/ivOnboarding"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:src="@drawable/posdes"
+        android:contentDescription="Onboarding Image" />
+
+    <TextView
+        android:id="@+id/tvTitleOnboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Judul Onboarding"
+        android:textColor="#065F46"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvDescOnboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Deskripsi lengkap mengenai fitur aplikasi posyandu desa..."
+        android:textColor="#4B5563"
+        android:textSize="16sp"
+        android:gravity="center" />
+
+</LinearLayout>

@@ -11,8 +11,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.loginpage.databinding.FragmentHomePosyanduBinding
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class FragmentHomePosyandu : Fragment() {
 
@@ -46,6 +53,55 @@ class FragmentHomePosyandu : Fragment() {
         setupLayananChips()
         setupTombolLama()
         setupClickListeners()
+        setupNews()
+        loadPhoto()
+    }
+
+    private fun loadPhoto() {
+        // Menggunakan foto yang relevan dengan tema Posyandu Desa
+        val photos = listOf(
+            PhotoModel("Pemeriksaan Balita", "https://loremflickr.com/400/300/baby,clinic?lock=1"),
+            PhotoModel("Ibu & Anak", "https://loremflickr.com/400/300/mother,baby?lock=2"),
+            PhotoModel("Kesehatan Desa", "https://loremflickr.com/400/300/health,doctor?lock=3"),
+            PhotoModel("Imunisasi", "https://loremflickr.com/400/300/vaccine?lock=4"),
+            PhotoModel("Gizi Anak", "https://loremflickr.com/400/300/nutrition,food?lock=5"),
+            PhotoModel("Posyandu Rutin", "https://loremflickr.com/400/300/clinic,village?lock=6"),
+            PhotoModel("Edukasi Gizi", "https://loremflickr.com/400/300/health,education?lock=7"),
+            PhotoModel("Tumbuh Kembang", "https://loremflickr.com/400/300/baby,play?lock=8"),
+            PhotoModel("Layanan Lansia", "https://loremflickr.com/400/300/senior,health?lock=9"),
+            PhotoModel("Kader Aktif", "https://loremflickr.com/400/300/nurse,community?lock=10")
+        )
+        
+        val adapter = PhotoAdapter(photos)
+        binding.rvGallery.adapter = adapter
+        binding.rvGallery.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    private fun setupNews() {
+        binding.rvNews.layoutManager = LinearLayoutManager(requireContext())
+        fetchNews()
+    }
+
+    private fun fetchNews() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api-berita-indonesia.vercel.app/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(NewsApiService::class.java)
+        // Menggunakan kategori 'gaya-hidup' agar lebih relevan dengan kesehatan
+        service.getLifestyle().enqueue(object : Callback<NewsResponse> {
+            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+                if (response.isSuccessful) {
+                    val posts = response.body()?.data?.posts ?: emptyList()
+                    binding.rvNews.adapter = NewsAdapter(posts)
+                }
+            }
+
+            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                // Handle failure
+            }
+        })
     }
 
     private fun loadDataBalita() {

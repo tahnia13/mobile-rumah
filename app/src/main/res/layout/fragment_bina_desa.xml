@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ECFDF5">
+
+    <!-- Top Navigation Tabs -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:tabIndicatorColor="#10B981"
+        app:tabSelectedTextColor="#10B981"
+        app:tabTextColor="#6B7280"
+        app:tabMode="scrollable">
+
+        <com.google.android.material.tabs.TabItem android:text="Warga" />
+        <com.google.android.material.tabs.TabItem android:text="User" />
+        <com.google.android.material.tabs.TabItem android:text="Posyandu" />
+        <com.google.android.material.tabs.TabItem android:text="Kader" />
+        <com.google.android.material.tabs.TabItem android:text="Jadwal" />
+        <com.google.android.material.tabs.TabItem android:text="Layanan" />
+        <com.google.android.material.tabs.TabItem android:text="Imunisasi" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Main Content: RecyclerView Only -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBinaDesa"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+</LinearLayout>

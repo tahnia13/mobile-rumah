@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_home"
         android:title="Beranda" />
     <item
+        android:id="@+id/nav_bina_desa"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Bina Desa" />
+    <item
         android:id="@+id/nav_about"
         android:icon="@drawable/ic_about"
         android:title="Tentang" />

@@ -67,6 +67,14 @@ class MainActivity2 : AppCompatActivity() {
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     true
                 }
+                R.id.nav_bina_desa -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentBinaDesa())
+                        .commit()
+                    supportActionBar?.title = "Posyandu Desa"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    true
+                }
                 R.id.nav_settings -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, FragmentSettings())

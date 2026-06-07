@@ -49,6 +49,30 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- List Berita Terbaru (Moved to Top) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📰 Berita Terbaru"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#065F46"
+            android:layout_marginBottom="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvGallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="24dp" />
+
         <!-- Form Edit Data (TextInputLayout) -->
         <TextView
             android:layout_width="wrap_content"
