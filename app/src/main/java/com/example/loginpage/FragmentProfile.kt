@@ -29,14 +29,14 @@ class FragmentProfile : Fragment() {
 
         // Isi data profil pengembang
         binding.tvDeveloperName.text = "Tahnia"
-        binding.tvNim.text = "20220040080"
-        binding.tvProdi.text = "Teknik Informatika"
-        binding.tvUniversitas.text = "Universitas Nusa Putra"
+        binding.tvNim.text = "2457301141"
+        binding.tvProdi.text = "Sistem Informasi"
+        binding.tvUniversitas.text = "Politeknik Caltex Riau"
         binding.tvEmail.text = "tahnia@gmail.com"
         binding.tvVersion.text = "Version 1.0.0"
 
         binding.tvDeskripsi.text = """
-            Halo! Saya adalah mahasiswa Teknik Informatika yang memiliki minat besar dalam pengembangan aplikasi mobile, terutama Android. 
+            Halo! Saya adalah mahasiswa Sistem Informasi yang memiliki minat besar dalam pengembangan aplikasi mobile, terutama Android. 
             
             Aplikasi Bina Desa ini dikembangkan sebagai bagian dari proyek akhir untuk memenuhi tugas mata kuliah Pemrograman Mobile.
             
@@ -52,6 +52,17 @@ class FragmentProfile : Fragment() {
             • GridLayout
             • ListView/SimpleAdapter
         """.trimIndent()
+
+        // Tombol Kembali ke Beranda
+        binding.btnBackToHome.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentHomePosyandu())
+                .commit()
+            (activity as? MainActivity2)?.apply {
+                supportActionBar?.title = "Posyandu Desa"
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+        }
 
         // Tambahkan tombol Settings jika ada di layout
         val btnSettings = view.findViewById<Button>(R.id.btnSettings)

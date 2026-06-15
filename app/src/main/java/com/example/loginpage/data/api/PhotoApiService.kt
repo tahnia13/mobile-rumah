@@ -1,5 +1,6 @@
-package com.example.loginpage
+package com.example.loginpage.data.api
 
+import com.example.loginpage.data.model.PhotoModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

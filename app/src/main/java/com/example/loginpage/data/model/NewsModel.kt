@@ -1,4 +1,4 @@
-package com.example.loginpage
+package com.example.loginpage.data.model
 
 import com.google.gson.annotations.SerializedName
 

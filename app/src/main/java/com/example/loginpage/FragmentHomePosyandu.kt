@@ -11,21 +11,37 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.loginpage.data.AppDatabase
+import com.example.loginpage.data.api.NewsApiService
+import com.example.loginpage.data.entity.BalitaEntity
+import com.example.loginpage.data.entity.CatatanEntity
+import com.example.loginpage.data.model.NewsResponse
+import com.example.loginpage.data.model.PhotoModel
 import com.example.loginpage.databinding.FragmentHomePosyanduBinding
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FragmentHomePosyandu : Fragment() {
 
     private var _binding: FragmentHomePosyanduBinding? = null
     private val binding get() = _binding!!
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var database: AppDatabase
+    private lateinit var catatanAdapter: CatatanAdapter
+    private var currentBalita: BalitaEntity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +55,10 @@ class FragmentHomePosyandu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi SharedPreferences untuk menyimpan data balita
+        // Inisialisasi Database Room
+        database = AppDatabase.getDatabase(requireContext())
+
+        // Inisialisasi SharedPreferences
         sharedPref = requireContext().getSharedPreferences("DataBalita", Context.MODE_PRIVATE)
 
         // Ambil data user
@@ -55,6 +74,31 @@ class FragmentHomePosyandu : Fragment() {
         setupClickListeners()
         setupNews()
         loadPhoto()
+        setupRecyclerViewCatatan()
+        observeCatatan()
+    }
+
+    private fun setupRecyclerViewCatatan() {
+        catatanAdapter = CatatanAdapter(emptyList()) { catatan ->
+            lifecycleScope.launch(Dispatchers.IO) {
+                database.posyanduDao().deleteCatatan(catatan)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Catatan dihapus", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        binding.rvCatatan.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = catatanAdapter
+        }
+    }
+
+    private fun observeCatatan() {
+        lifecycleScope.launch {
+            database.posyanduDao().getAllCatatan().collectLatest { list ->
+                catatanAdapter.updateData(list)
+            }
+        }
     }
 
     private fun loadPhoto() {
@@ -105,16 +149,18 @@ class FragmentHomePosyandu : Fragment() {
     }
 
     private fun loadDataBalita() {
-        // Load data dari SharedPreferences
-        val namaBalita = sharedPref.getString("nama_balita", "")
-        val usiaBalita = sharedPref.getString("usia_balita", "")
-        val beratBadan = sharedPref.getString("berat_badan", "")
-        val tinggiBadan = sharedPref.getString("tinggi_badan", "")
-
-        binding.etNamaBalita.setText(namaBalita)
-        binding.etUsiaBalita.setText(usiaBalita)
-        binding.etBeratBadan.setText(beratBadan)
-        binding.etTinggiBadan.setText(tinggiBadan)
+        lifecycleScope.launch {
+            database.posyanduDao().getAllBalita().collectLatest { list ->
+                if (list.isNotEmpty()) {
+                    val balita = list[0] // Ambil data terakhir yang disimpan
+                    currentBalita = balita
+                    binding.etNamaBalita.setText(balita.nama)
+                    binding.etUsiaBalita.setText(balita.usia)
+                    binding.etBeratBadan.setText(balita.berat)
+                    binding.etTinggiBadan.setText(balita.tinggi)
+                }
+            }
+        }
     }
 
     private fun saveDataBalita() {
@@ -148,15 +194,49 @@ class FragmentHomePosyandu : Fragment() {
             return
         }
 
-        // Simpan ke SharedPreferences
-        val editor = sharedPref.edit()
-        editor.putString("nama_balita", namaBalita)
-        editor.putString("usia_balita", usiaBalita)
-        editor.putString("berat_badan", beratBadan)
-        editor.putString("tinggi_badan", tinggiBadan)
-        editor.apply()
+        // Simpan ke Room Database
+        lifecycleScope.launch(Dispatchers.IO) {
+            val balita = BalitaEntity(
+                id = currentBalita?.id ?: 0,
+                nama = namaBalita,
+                usia = usiaBalita,
+                berat = beratBadan,
+                tinggi = tinggiBadan
+            )
+            
+            if (currentBalita == null) {
+                database.posyanduDao().insertBalita(balita)
+            } else {
+                database.posyanduDao().updateBalita(balita)
+            }
+            
+            withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Data balita berhasil disimpan (Room)!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-        Toast.makeText(requireContext(), "Data balita berhasil disimpan!", Toast.LENGTH_SHORT).show()
+    private fun saveCatatan() {
+        val judul = binding.etJudulCatatan.text.toString().trim()
+        val isi = binding.etIsiCatatan.text.toString().trim()
+
+        if (judul.isEmpty() || isi.isEmpty()) {
+            Toast.makeText(requireContext(), "Judul dan isi catatan tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val tanggal = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date())
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val catatan = CatatanEntity(judul = judul, isi = isi, tanggal = tanggal)
+            database.posyanduDao().insertCatatan(catatan)
+            
+            withContext(Dispatchers.Main) {
+                binding.etJudulCatatan.text?.clear()
+                binding.etIsiCatatan.text?.clear()
+                Toast.makeText(requireContext(), "Catatan ditambahkan!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupLayananChips() {
@@ -185,6 +265,30 @@ class FragmentHomePosyandu : Fragment() {
     }
 
     private fun setupTombolLama() {
+        // Tombol Profil
+        binding.btnProfile.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentProfile())
+                .addToBackStack(null)
+                .commit()
+            (activity as? MainActivity2)?.apply {
+                supportActionBar?.title = "Profil Developer"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+        }
+
+        // Tombol Pengaturan
+        binding.btnSettings.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentSettings())
+                .addToBackStack(null)
+                .commit()
+            (activity as? MainActivity2)?.apply {
+                supportActionBar?.title = "Pengaturan"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+        }
+
         // Tombol Rumus Bangun Ruang
         binding.btnRuang.setOnClickListener {
             val intent = Intent(requireContext(), RumusBangunRuangActivity::class.java)
@@ -215,6 +319,11 @@ class FragmentHomePosyandu : Fragment() {
         // Tombol Simpan Data Balita
         binding.btnSimpanData.setOnClickListener {
             saveDataBalita()
+        }
+
+        // Tombol Simpan Catatan
+        binding.btnSimpanCatatan.setOnClickListener {
+            saveCatatan()
         }
 
         // Tombol Logout

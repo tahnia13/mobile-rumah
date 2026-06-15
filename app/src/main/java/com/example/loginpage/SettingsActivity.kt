@@ -43,6 +43,10 @@ class SettingsActivity : AppCompatActivity() {
 
         listView.adapter = adapter
 
+        findViewById<android.view.View>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
+
         listView.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> showPrivacyPolicy()

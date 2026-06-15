@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+     id("com.google.devtools.ksp")
 }
 
 android {
@@ -50,4 +51,10 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // 2. TAMBAHKAN LIBRARY ROOM DI SINI
+    val room_version = "2.6.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 }

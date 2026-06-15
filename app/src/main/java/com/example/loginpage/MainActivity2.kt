@@ -71,15 +71,23 @@ class MainActivity2 : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, FragmentBinaDesa())
                         .commit()
-                    supportActionBar?.title = "Posyandu Desa"
+                    supportActionBar?.title = "Bina Desa"
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }
-                R.id.nav_settings -> {
+                R.id.nav_balita -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentSettings())
+                        .replace(R.id.fragmentContainer, FragmentBalita())
                         .commit()
-                    supportActionBar?.title = "Pengaturan"
+                    supportActionBar?.title = "Data Balita"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    true
+                }
+                R.id.nav_note -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, FragmentNote())
+                        .commit()
+                    supportActionBar?.title = "Catatan Kesehatan"
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }
@@ -88,14 +96,6 @@ class MainActivity2 : AppCompatActivity() {
                         .replace(R.id.fragmentContainer, FragmentAbout())
                         .commit()
                     supportActionBar?.title = "Tentang Posyandu"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    true
-                }
-                R.id.nav_profile -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentProfile())
-                        .commit()
-                    supportActionBar?.title = "Profil Developer"
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     true
                 }

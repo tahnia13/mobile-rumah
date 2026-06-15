@@ -1,5 +1,6 @@
-package com.example.loginpage
+package com.example.loginpage.data.api
 
+import com.example.loginpage.data.model.NewsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 
