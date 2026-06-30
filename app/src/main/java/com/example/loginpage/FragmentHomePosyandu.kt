@@ -1,5 +1,7 @@
 package com.example.loginpage
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -211,6 +213,11 @@ class FragmentHomePosyandu : Fragment() {
             }
             
             withContext(Dispatchers.Main) {
+                NotificationHelper(requireContext()).sendNotification(
+                    "Pembaruan Data",
+                    "Data balita $namaBalita telah diperbarui.",
+                    "BALITA"
+                )
                 Toast.makeText(requireContext(), "Data balita berhasil disimpan (Room)!", Toast.LENGTH_SHORT).show()
             }
         }
@@ -326,10 +333,55 @@ class FragmentHomePosyandu : Fragment() {
             saveCatatan()
         }
 
+        // Tombol Pasang Pengingat
+        binding.btnSetReminder.setOnClickListener {
+            setReminder()
+        }
+
+        // Tombol Mengambang (FAB) Reminder
+        binding.fabReminder.setOnClickListener {
+            binding.etReminderMinutes.requestFocus()
+            Toast.makeText(requireContext(), "Silakan tentukan menit pengingat di form", Toast.LENGTH_SHORT).show()
+        }
+
         // Tombol Logout
         binding.btnLogout.setOnClickListener {
             showLogoutConfirmation()
         }
+    }
+
+    private fun setReminder() {
+        val minutesText = binding.etReminderMinutes.text.toString().trim()
+        if (minutesText.isEmpty()) {
+            binding.etReminderMinutes.error = "Masukkan menit"
+            return
+        }
+
+        val minutes = minutesText.toLong()
+        if (minutes <= 0) {
+            binding.etReminderMinutes.error = "Menit harus lebih dari 0"
+            return
+        }
+
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), ReminderReceiver::class.java).apply {
+            putExtra("title", "Pengingat Posyandu")
+            putExtra("message", "Sudah $minutes menit berlalu, jangan lupa cek kesehatan!")
+            putExtra("fragment_tag", "HOME")
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val triggerTime = System.currentTimeMillis() + (minutes * 60 * 1000)
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+
+        binding.etReminderMinutes.text?.clear()
+        Toast.makeText(requireContext(), "Pengingat dipasang untuk $minutes menit lagi", Toast.LENGTH_SHORT).show()
     }
 
     private fun showLogoutConfirmation() {

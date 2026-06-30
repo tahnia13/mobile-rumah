@@ -3,8 +3,11 @@ package com.example.loginpage
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.Manifest
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -36,6 +39,13 @@ class MainActivity2 : AppCompatActivity() {
         // Inisialisasi SharedPreferences
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
+        // Request Permission Notifikasi (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+            }
+        }
+
         // Cek apakah user sudah login
         if (!sharedPreferences.getBoolean("isLogin", false)) {
             val intent = Intent(this, MainActivity::class.java)
@@ -58,50 +68,11 @@ class MainActivity2 : AppCompatActivity() {
 
         // Set listener untuk bottom navigation
         bottomNav.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentHomePosyandu())
-                        .commit()
-                    supportActionBar?.title = "Posyandu Desa"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    true
-                }
-                R.id.nav_bina_desa -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentBinaDesa())
-                        .commit()
-                    supportActionBar?.title = "Bina Desa"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    true
-                }
-                R.id.nav_balita -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentBalita())
-                        .commit()
-                    supportActionBar?.title = "Data Balita"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    true
-                }
-                R.id.nav_note -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentNote())
-                        .commit()
-                    supportActionBar?.title = "Catatan Kesehatan"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    true
-                }
-                R.id.nav_about -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, FragmentAbout())
-                        .commit()
-                    supportActionBar?.title = "Tentang Posyandu"
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    true
-                }
-                else -> false
-            }
+            handleNavigation(menuItem.itemId)
         }
+
+        // Handle intent dari notifikasi
+        handleIntent(intent)
 
         // Menggunakan OnBackPressedCallback (cara modern, tidak deprecated)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -120,6 +91,73 @@ class MainActivity2 : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val fragmentTag = intent?.getStringExtra("open_fragment")
+        if (fragmentTag != null) {
+            when (fragmentTag) {
+                "BALITA" -> {
+                    handleNavigation(R.id.nav_balita)
+                    bottomNav.selectedItemId = R.id.nav_balita
+                }
+                "NOTE" -> {
+                    handleNavigation(R.id.nav_note)
+                    bottomNav.selectedItemId = R.id.nav_note
+                }
+            }
+        }
+    }
+
+    private fun handleNavigation(itemId: Int): Boolean {
+        return when (itemId) {
+            R.id.nav_home -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentHomePosyandu())
+                    .commit()
+                supportActionBar?.title = "Posyandu Desa"
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                true
+            }
+            R.id.nav_bina_desa -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentBinaDesa())
+                    .commit()
+                supportActionBar?.title = "Bina Desa"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                true
+            }
+            R.id.nav_balita -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentBalita())
+                    .commit()
+                supportActionBar?.title = "Data Balita"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                true
+            }
+            R.id.nav_note -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentNote())
+                    .commit()
+                supportActionBar?.title = "Catatan Kesehatan"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                true
+            }
+            R.id.nav_about -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FragmentAbout())
+                    .commit()
+                supportActionBar?.title = "Tentang Posyandu"
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -82,6 +82,11 @@ class FragmentNote : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             db.posyanduDao().insertCatatan(note)
             withContext(Dispatchers.Main) {
+                NotificationHelper(requireContext()).sendNotification(
+                    "Catatan Baru",
+                    "Catatan '$judul' telah ditambahkan.",
+                    "NOTE"
+                )
                 binding.etJudul.text?.clear()
                 binding.etIsi.text?.clear()
                 Toast.makeText(requireContext(), "Catatan disimpan!", Toast.LENGTH_SHORT).show()

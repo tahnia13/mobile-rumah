@@ -80,6 +80,11 @@ class FragmentBalita : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             db.posyanduDao().insertBalita(balita)
             withContext(Dispatchers.Main) {
+                NotificationHelper(requireContext()).sendNotification(
+                    "Pendaftaran Berhasil",
+                    "Data balita $nama telah berhasil disimpan.",
+                    "BALITA"
+                )
                 binding.etNama.text?.clear()
                 binding.etUsia.text?.clear()
                 binding.etBerat.text?.clear()
