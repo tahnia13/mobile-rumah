@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.loginpage.databinding.FragmentProfileBinding
@@ -53,6 +54,8 @@ class FragmentProfile : Fragment() {
             • ListView/SimpleAdapter
         """.trimIndent()
 
+        setupStackList()
+
         // Tombol Kembali ke Beranda
         binding.btnBackToHome.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -70,6 +73,26 @@ class FragmentProfile : Fragment() {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun setupStackList() {
+        val data = listOf(
+            mapOf("tech" to "Kotlin", "desc" to "Bahasa pemrograman utama"),
+            mapOf("tech" to "Room Database", "desc" to "Penyimpanan data lokal"),
+            mapOf("tech" to "Retrofit", "desc" to "Networking & API"),
+            mapOf("tech" to "Glide", "desc" to "Image loading library"),
+            mapOf("tech" to "Material Design", "desc" to "Komponen UI modern")
+        )
+
+        val adapter = SimpleAdapter(
+            requireContext(),
+            data,
+            android.R.layout.simple_list_item_2,
+            arrayOf("tech", "desc"),
+            intArrayOf(android.R.id.text1, android.R.id.text2)
+        )
+
+        binding.listViewStack.adapter = adapter
     }
 
     override fun onDestroyView() {

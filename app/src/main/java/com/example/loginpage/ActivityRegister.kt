@@ -82,8 +82,12 @@ class ActivityRegister : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Generate OTP 6 digit
-            generatedOTP = generateOTP()
+            // Ambil 6 angka terakhir dari No. HP sebagai OTP
+            generatedOTP = if (noHp.length >= 6) {
+                noHp.substring(noHp.length - 6)
+            } else {
+                noHp // Fallback jika < 6 digit (sudah divalidasi minimal 10)
+            }
 
             // Simpan data user sementara
             val editor = sharedPreferences.edit()
@@ -106,20 +110,11 @@ class ActivityRegister : AppCompatActivity() {
 
         // Link ke halaman login
         binding.tvLoginHere.setOnClickListener {
-            finish()
-        }
+        finish()
     }
+}
 
-    private fun generateOTP(): String {
-        val random = Random()
-        val otp = StringBuilder()
-        for (i in 0 until 6) {
-            otp.append(random.nextInt(10))
-        }
-        return otp.toString()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 finish()

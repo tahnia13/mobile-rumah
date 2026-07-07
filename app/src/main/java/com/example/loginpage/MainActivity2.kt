@@ -6,11 +6,13 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.Manifest
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.SearchView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.loginpage.databinding.ActivityMain2Binding
 
@@ -18,7 +20,6 @@ class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +29,7 @@ class MainActivity2 : AppCompatActivity() {
         setContentView(binding.root)
 
         // Setup Toolbar
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Posyandu Desa"
 
         // Di MainActivity2, tombol back tidak ditampilkan
@@ -160,8 +160,57 @@ class MainActivity2 : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as? SearchView
+
+        searchView?.queryHint = "Cari informasi..."
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    val targetId = when (query.lowercase().trim()) {
+                        "balita", "data balita", "anak", "bayi" -> R.id.nav_balita
+                        "note", "catatan", "kesehatan", "sakit", "jurnal" -> R.id.nav_note
+                        "desa", "bina desa", "unit", "kader", "warga" -> R.id.nav_bina_desa
+                        "tentang", "about", "info", "posyandu" -> R.id.nav_about
+                        "home", "beranda", "utama", "dashboard" -> R.id.nav_home
+                        else -> null
+                    }
+
+                    if (targetId != null) {
+                        handleNavigation(targetId)
+                        bottomNav.selectedItemId = targetId
+                        searchItem?.collapseActionView()
+                    } else {
+                        Toast.makeText(this@MainActivity2, "Pencarian '$query' tidak ditemukan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Bisa ditambahkan logika filter di sini nanti
+                return true
+            }
+        })
+
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_search -> {
+                // Secara default, SearchView akan menangani klik pada ikon search
+                true
+            }
+            R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
             android.R.id.home -> {
                 // Kembali ke fragment Home (Dashboard)
                 supportFragmentManager.beginTransaction()

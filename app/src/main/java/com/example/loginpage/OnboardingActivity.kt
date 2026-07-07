@@ -1,5 +1,6 @@
 package com.example.loginpage
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -58,9 +59,18 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         binding.btnGetStarted.setOnClickListener {
-            // Pindah ke Login (MainActivity)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            val isLogin = sharedPreferences.getBoolean("isLogin", false)
+
+            if (isLogin) {
+                // Jika sudah login, lanjut ke Dashboard (MainActivity2)
+                val intent = Intent(this, MainActivity2::class.java)
+                startActivity(intent)
+            } else {
+                // Jika belum login, ke halaman Login (MainActivity)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
             finish()
         }
     }

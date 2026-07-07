@@ -212,8 +212,12 @@ class ActivityVerification : AppCompatActivity() {
     }
 
     private fun resendOTP() {
-        // Generate OTP baru
-        val newOTP = generateOTP()
+        // Gunakan 6 angka terakhir dari No. HP sebagai OTP
+        val newOTP = if (noHp.length >= 6) {
+            noHp.substring(noHp.length - 6)
+        } else {
+            noHp
+        }
         correctOTP = newOTP
 
         // Simpan OTP baru
@@ -221,17 +225,12 @@ class ActivityVerification : AppCompatActivity() {
         editor.putString("temp_otp", newOTP)
         editor.apply()
 
-        Toast.makeText(this, "Kode OTP baru: $newOTP", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Kode OTP: $newOTP (6 angka terakhir No. HP)", Toast.LENGTH_LONG).show()
 
         // Reset timer
         timer?.cancel()
         startTimer()
         clearOTP()
-    }
-
-    private fun generateOTP(): String {
-        val random = Random(System.currentTimeMillis())
-        return (100000 + random.nextInt(900000)).toString()
     }
 
     override fun onDestroy() {

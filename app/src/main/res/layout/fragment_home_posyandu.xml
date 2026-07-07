@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background_posyandu">
@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="100dp">
 
         <!-- Header -->
         <LinearLayout
@@ -478,6 +481,18 @@
             android:textColor="#065F46"
             android:layout_marginBottom="12dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCameraQR"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="#059669"
+            android:text="📷 Fitur Kamera &amp; QR"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="28dp" />
+
         <!-- Tombol Rumus Bangun Ruang -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRuang"
@@ -604,7 +619,7 @@
             app:cornerRadius="28dp" />
 
     </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabReminder"

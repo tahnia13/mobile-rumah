@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class FragmentHomePosyandu : Fragment() {
+class   FragmentHomePosyandu : Fragment() {
 
     private var _binding: FragmentHomePosyanduBinding? = null
     private val binding get() = _binding!!
@@ -60,7 +60,7 @@ class FragmentHomePosyandu : Fragment() {
         // Inisialisasi Database Room
         database = AppDatabase.getDatabase(requireContext())
 
-        // Inisialisasi SharedPreferences
+        // Inisialisasi Share   dPreferences
         sharedPref = requireContext().getSharedPreferences("DataBalita", Context.MODE_PRIVATE)
 
         // Ambil data user
@@ -296,6 +296,11 @@ class FragmentHomePosyandu : Fragment() {
             }
         }
 
+        // Tombol Fitur Kamera & QR
+        binding.btnCameraQR.setOnClickListener {
+            startActivity(Intent(requireContext(), CameraQRActivity::class.java))
+        }
+
         // Tombol Rumus Bangun Ruang
         binding.btnRuang.setOnClickListener {
             val intent = Intent(requireContext(), RumusBangunRuangActivity::class.java)
@@ -304,8 +309,10 @@ class FragmentHomePosyandu : Fragment() {
 
         // Tombol Buka Dashboard Web
         binding.btnWebDashboard.setOnClickListener {
-            val url = "https://tahnia-posyandu.alwaysdata.net/dashboard"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val intent = Intent(requireContext(), WebViewActivity::class.java).apply {
+                putExtra("url", "https://tahnia-posyandu.alwaysdata.net/dashboard")
+                putExtra("title", "Dashboard Web")
+            }
             startActivity(intent)
         }
 

@@ -16,11 +16,12 @@ class WelcomeActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_welcome)
 
-        // Delay 2 detik, lalu langsung masuk ke Onboarding
+        // Splash Screen dengan delay 2 detik (Pertemuan 6)
         Handler(Looper.getMainLooper()).postDelayed({
+            // Selalu tampilkan Onboarding setelah Splash Screen (Permintaan User)
             val intent = Intent(this, OnboardingActivity::class.java)
             startActivity(intent)
-            finish()
+            finish() // Menghapus Splash Screen dari stack
         }, 2000)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
